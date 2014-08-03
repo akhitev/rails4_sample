@@ -22,7 +22,7 @@ describe "SponsorPayApiTest" do
       Time.stubs(:now).returns(Time.mktime(2014, 1, 1))
 
       sponsorpay_api.build_request(params).must_equal('appid=157&device_id=2b6f0cc904d137be2e1730235f5664094b831186&format=json&ip=109.235.143.113&locale=de&offer_types=112&page=2&pub0=campaign2&timestamp=1388520000'+
-                                                          '&uid=player1&b07a12df7d52e6c118e5d47d3f9e60135b109a1f&hashkey=97cc99b02839be57be47e9031509da1514bb8956')
+                                                          '&uid=player1&hashkey=97cc99b02839be57be47e9031509da1514bb8956')
     end
   end
 
@@ -44,5 +44,4 @@ describe "SponsorPayApiTest" do
     response.expects(:[]).with(SponsorPayAPI::SIGNATURE_HEADER).returns('22c764f5b52030a9b3577017f59b5dcf84d42d84').at_least_once
     sponsorpay_api.valid_response(response).must_equal false
   end
-
 end

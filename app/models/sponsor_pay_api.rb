@@ -20,19 +20,18 @@ class SponsorPayAPI
     #Step 1: Gather all request parameters
     params = add_predefined_params params
     params['timestamp'] = Time.now.to_i
-
+    url = sort_concat(params)
     #Sort and concat all request parameters and append api key
-    result = sort_concat(params).concat('&').concat(api_key)
     # append hashkey
-    result.concat("&hashkey=#{get_hash(result)}")
+    url.concat("&hashkey=#{get_hash(url + '&' + api_key)}")
   end
 
   def offers_response request
-    Rails.logger.debug{'call offers api' + @endpoint + request}
-    #response = Net::HTTP.get_response(URI(@endpoint + request))
-    response = RestClient.get(@endpoint + '?' + request)
-    if response.code != 200
-      Rails.logger.warn{'offers api returned error' + response.inspect}
+    url = @endpoint + '?'+ request
+    Rails.logger.debug{'call offers api' + url}
+    response = RestClient.get(url){|response, request, result| response }
+    if !response.code.eql? '200'
+      Rails.logger.warn{'offers api returned error ' + response.code.to_s + ' ' + response.body}
       return
     end
     #check response signature
