@@ -1,10 +1,11 @@
 ENV['RAILS_ENV'] ||= 'test'
 require File.expand_path('../../config/environment', __FILE__)
+require 'minitest/autorun'
 require 'rails/test_help'
 
-class ActiveSupport::TestCase
-  # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order.
-  fixtures :all
+require "mocha/mini_test"
 
-  # Add more helper methods to be used by all tests here...
+class ActiveSupport::TestCase
+
 end
+

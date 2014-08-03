@@ -14,6 +14,9 @@ gem 'bootstrap-sass'
 gem 'simple_form'
 gem 'slim-rails'
 gem 'therubyracer', :platform=>:ruby
+gem "mocha",:group => :test
+gem 'rest-client', '~> 1.7.2'
+
 group :development do
   gem 'better_errors'
   gem 'binding_of_caller', :platforms=>[:mri_21]
@@ -24,3 +27,4 @@ group :development, :test do
   gem 'pry-rails'
   gem 'pry-rescue'
 end
+
