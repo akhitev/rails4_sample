@@ -30,7 +30,7 @@ class SponsorPayAPI
   def offers_response request
     Rails.logger.debug{'call offers api' + @endpoint + request}
     #response = Net::HTTP.get_response(URI(@endpoint + request))
-    response = RestClient.get(@endpoint ,request)
+    response = RestClient.get(@endpoint + '?' + request)
     if response.code != 200
       Rails.logger.warn{'offers api returned error' + response.inspect}
       return

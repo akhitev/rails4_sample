@@ -1,7 +1,6 @@
 class OffersController < ApplicationController
 
   def search_form
-      @search_form = SearchForm.new
   end
 
   def search
