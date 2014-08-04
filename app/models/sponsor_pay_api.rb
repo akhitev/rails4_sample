@@ -2,7 +2,7 @@ class SponsorPayAPI
 
   require 'digest'
 
-  SIGNATURE_HEADER = 'X-Sponsorpay-Response-Signature'
+  SIGNATURE_HEADER = 'X_Sponsorpay_Response_Signature'
 
 
   def build_request params
@@ -15,17 +15,19 @@ class SponsorPayAPI
   end
 
   def http_response url
-    RestClient.get(url){|response, request, result| response }
+    response = RestClient.get(url){|response, request, result| response }
+    Rails.logger.debug{'response ' + response.code.to_s + ' ' + response.body}
+    response
   end
 
 
   def valid_response? response
-    expected_hash = get_hash(response.body.concat(api_key))
-    result = response[SIGNATURE_HEADER].eql? expected_hash
+    expected_hash = get_hash(response.body + api_key)
+    result = response.headers[SIGNATURE_HEADER.downcase.to_sym].eql? expected_hash
 
     if !result
-      Rails.logger.error{'Returned response signature header differs from expected. Expected : ' + expected_hash + 'Actual ' + response[SIGNATURE_HEADER]+
-      'response : ' + response.inspect}
+      #TODO add some alert here
+      Rails.logger.error{'Signature header differs from expected.' + response.inspect}
     end
     result
   end

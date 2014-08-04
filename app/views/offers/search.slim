@@ -1,4 +1,4 @@
--if !@offers.nil?
+-if !@offers.nil?&& @offers.length > 0
   = render partial: 'offer', collection: @offers
 -else
   =render 'no_offers'
