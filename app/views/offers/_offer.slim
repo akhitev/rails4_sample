@@ -1,4 +1,7 @@
 .offer
-  .title Offer Title
-  .payout Offer Payout
-   .thumbnail offer thumbnail
+  .title
+    = offer['title']
+  .payout
+    = offer['payout']
+  .thumbnail
+    = image_tag offer['thumbnail']['lowres']

@@ -1,4 +1,4 @@
 -if !@offers.nil?
-  = render @offers
+  = render partial: 'offer', collection: @offers
 -else
   =render 'no_offers'
