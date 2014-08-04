@@ -2,7 +2,7 @@ require 'test_helper'
 
 describe "SponsorPayApiTest" do
 
-  let(:sponsorpay_api) { SponsorPayAPI.new }
+  let(:sponsorpay_api) { SponsorPayAPIOffers.new }
   describe "url prepare" do
     it "should calculate hash" do
       sponsorpay_api.get_hash('appid=157&device_id=2b6f0cc904d137be2e1730235f5664094b831186&ip=212.45.111.17&locale=de&page=2&ps_time=1312211903&pub0=campaign2&timestamp=1312553361&uid=player1&e95a21621a1865bcbae3bee89c4d4f84').
@@ -26,22 +26,15 @@ describe "SponsorPayApiTest" do
     end
   end
 
-  def given_valid_response
-    response = mock('Net::HTTPResponse')
-    response.stubs(:status).returns(200)
-    response.stubs(:body).returns(File.read("test/fixtures/sample_offers_response.json"))
-    response
-  end
-
   it "should declare valid response signed with correct signature" do
     response = given_valid_response
     response.expects(:[]).with(SponsorPayAPI::SIGNATURE_HEADER).returns('73c764f5b52030a9b3577017f59b5dcf84d42d84').at_least_once
-    sponsorpay_api.valid_response(response).must_equal true
+    sponsorpay_api.valid_response?(response).must_equal true
   end
 
   it "should not verify response signed with valid signature" do
     response = given_valid_response
     response.expects(:[]).with(SponsorPayAPI::SIGNATURE_HEADER).returns('22c764f5b52030a9b3577017f59b5dcf84d42d84').at_least_once
-    sponsorpay_api.valid_response(response).must_equal false
+    sponsorpay_api.valid_response?(response).must_equal false
   end
 end

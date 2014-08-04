@@ -4,7 +4,7 @@ class OffersController < ApplicationController
   end
 
   def search
-    response = SponsorPayAPI.new().offers offer_params
+    response = SponsorPayAPIOffers.new().offers offer_params
     @offers = response['offers'] if !response.nil?
   end
 

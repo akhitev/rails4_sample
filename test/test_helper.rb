@@ -5,7 +5,11 @@ require 'rails/test_help'
 
 require "mocha/mini_test"
 
-class ActiveSupport::TestCase
-
+def given_valid_response
+  response = mock('Net::HTTPResponse')
+  response.stubs(:status).returns(200)
+  response.stubs(:body).returns(File.read("test/fixtures/sample_offers_response.json"))
+  response.stubs(:code).returns(200)
+  response
 end
 

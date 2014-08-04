@@ -2,22 +2,10 @@ class SponsorPayAPI
 
   require 'digest'
 
-  PREDEFINED_PARAMS = ['appid','format','device_id','locale','ip','offer_types']
-
   SIGNATURE_HEADER = 'X-Sponsorpay-Response-Signature'
-
-  def initialize
-    @endpoint = SPONSORPAY_CONFIGS['offer_endpoint']
-  end
-
-  def offers params
-    request = build_request(params)
-    offers_response(request)
-  end
 
 
   def build_request params
-    #Step 1: Gather all request parameters
     params = add_predefined_params params
     params['timestamp'] = Time.now.to_i
     url = sort_concat(params)
@@ -26,22 +14,12 @@ class SponsorPayAPI
     url.concat("&hashkey=#{get_hash(url + '&' + api_key)}")
   end
 
-  def offers_response request
-    url = @endpoint + '?'+ request
-    Rails.logger.debug{'call offers api' + url}
-    response = RestClient.get(url){|response, request, result| response }
-    if !response.code.eql? '200'
-      Rails.logger.warn{'offers api returned error ' + response.code.to_s + ' ' + response.body}
-      return
-    end
-    #check response signature
-    if !valid_response response
-      return
-    end
-    JSON.parse(response.body)
+  def http_response url
+    RestClient.get(url){|response, request, result| response }
   end
 
-  def valid_response response
+
+  def valid_response? response
     expected_hash = get_hash(response.body.concat(api_key))
     result = response[SIGNATURE_HEADER].eql? expected_hash
 
@@ -62,11 +40,16 @@ class SponsorPayAPI
   end
 
   def add_predefined_params params
-    PREDEFINED_PARAMS.each do |k|
+    predefined_params.each do |k|
       params[k] = SPONSORPAY_CONFIGS[k]
     end
     params
   end
+
+  def predefined_params
+    raise NotImplementedError 'Implement predefined_params'
+  end
+
 
   def get_hash str
     Digest::SHA1.hexdigest str
