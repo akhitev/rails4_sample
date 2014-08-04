@@ -23,7 +23,6 @@ class OffersControllerTest < ActionController::TestCase
     #mocking valid header checking
     SponsorPayAPI.any_instance.expects(:valid_response?).returns(true)
     post "search", {}
-    puts @response.inspect
     assert_not_nil assigns(:offers)
   end
 end

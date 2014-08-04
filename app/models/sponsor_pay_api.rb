@@ -23,8 +23,7 @@ class SponsorPayAPI
 
   def valid_response? response
     expected_hash = get_hash(response.body + api_key)
-    result = response.headers[SIGNATURE_HEADER.downcase.to_sym].eql? expected_hash
-
+    result = signature_header(response).eql? expected_hash
     if !result
       #TODO add some alert here
       Rails.logger.error{'Signature header differs from expected.' + response.inspect}
@@ -55,6 +54,11 @@ class SponsorPayAPI
 
   def get_hash str
     Digest::SHA1.hexdigest str
+  end
+
+
+  def signature_header(response)
+    response.headers[SIGNATURE_HEADER.downcase.to_sym]
   end
 
   private

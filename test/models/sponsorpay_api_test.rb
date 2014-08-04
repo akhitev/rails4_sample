@@ -28,13 +28,15 @@ describe "SponsorPayApiTest" do
 
   it "should declare valid response signed with correct signature" do
     response = given_valid_response
-    response.expects(:[]).with(SponsorPayAPI::SIGNATURE_HEADER).returns('73c764f5b52030a9b3577017f59b5dcf84d42d84').at_least_once
+    headers = {SponsorPayAPI::SIGNATURE_HEADER.downcase.to_sym => '73c764f5b52030a9b3577017f59b5dcf84d42d84'}
+    response.stubs(:headers).returns(headers)
     sponsorpay_api.valid_response?(response).must_equal true
   end
 
-  it "should not verify response signed with valid signature" do
+  it "should not verify response signed with incorrect signature" do
     response = given_valid_response
-    response.expects(:[]).with(SponsorPayAPI::SIGNATURE_HEADER).returns('22c764f5b52030a9b3577017f59b5dcf84d42d84').at_least_once
+    headers = {SponsorPayAPI::SIGNATURE_HEADER.downcase.to_sym => '12c764f5b52030a9b3577017f59b5dcf84d42d84'}
+    response.stubs(:headers).returns(headers)
     sponsorpay_api.valid_response?(response).must_equal false
   end
 end
