@@ -23,7 +23,7 @@ open in browser
 
 localhost:3000/
 
-test serach results ui page
+test search results ui page
 
 localhost:3000/test/
 
@@ -33,6 +33,8 @@ Documentation and Support
 
 Issues
 -------------
+1 Thumbnails access denied.
+2 No offers returned for given test data.
 
 Contributing
 ------------
